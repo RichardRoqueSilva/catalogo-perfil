@@ -9,18 +9,13 @@ import StatsPanel from './components/StatsPanel';
 import './App.css';
 
 function App() {
-  // 1. Usando o useReducer para gerenciar todo o estado da aplicação.
   const [state, dispatch] = useReducer(appReducer, initialState);
   const { users, selectedUser, loading, error, searchTerm } = state;
 
-  // 2. Usando nosso hook customizado para buscar os dados.
   useUsers(dispatch);
 
-  // 3. Usando nosso contexto de tema.
   const { theme, toggleTheme } = useTheme();
 
-  // 4. Usando `useMemo` para otimizar a filtragem.
-  // A lista só será refiltrada se `users` ou `searchTerm` mudarem.
   const filteredUsers = useMemo(() => {
     return users.filter(user =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -28,11 +23,10 @@ function App() {
   }, [users, searchTerm]);
 
   return (
-    // Aplicando a classe do tema dinamicamente
     <div className={`app-container ${theme}`}>
       <div className="container py-4">
         <header className="text-center p-3 mb-4 rounded shadow-sm header-custom">
-          <h1>Catálogo de Perfis v2.0</h1>
+          <h1>Catálogo de Perfis v2.0 (React)</h1>
           <button className="btn btn-sm btn-secondary" onClick={toggleTheme}>
             Alternar para Modo {theme === 'light' ? 'Escuro' : 'Claro'}
           </button>
@@ -46,7 +40,7 @@ function App() {
               placeholder="Buscar por nome..."
               value={searchTerm}
               onChange={e => dispatch({ type: 'SET_SEARCH_TERM', payload: e.target.value })}
-              aria-label="Buscar por nome" // Melhoria de Acessibilidade
+              aria-label="Buscar por nome"
             />
           </div>
         </div>
@@ -54,7 +48,19 @@ function App() {
         <main className="row">
           <section className="col-md-5" aria-labelledby="user-list-heading">
             <h2 id="user-list-heading" className="h4 mb-3">Lista de Usuários</h2>
-            <StatsPanel users={filteredUsers} />
+
+            {/* ===== PONTO FORTE DO REACT ===== */}
+            <div className="card bg-light mb-4">
+                <div className="card-body">
+                    <h5 className="card-title">Ponto Forte do React: Reatividade</h5>
+                    <p className="card-text small">
+                        O estado é centralizado. Quando você busca, a lista e o painel de estatísticas
+                        atualizam juntos, instantaneamente.
+                    </p>
+                    <StatsPanel users={filteredUsers} />
+                </div>
+            </div>
+            
             {loading && <p role="status">Carregando...</p>} 
             {error && <div className="alert alert-danger" role="alert">{error}</div>}
             {!loading && !error && (
@@ -69,25 +75,34 @@ function App() {
           <section className="col-md-7" aria-labelledby="user-details-heading">
             <h2 id="user-details-heading" className="h4 mb-3">Detalhes do Usuário</h2>
             <UserDetails user={selectedUser} />
+
+            {selectedUser && (
+            <div className="card mt-4 border-danger">
+                <div className="card-body">
+                    <h5 className="card-title text-danger">Ponto Fraco (Potencial) do Bootstrap</h5>
+                    <p className="card-text small">
+                        Aparência genérica "Bootstrap". Para um design único, seria necessário
+                        sobrescrever muitas classes, o que pode aumentar a complexidade do CSS.
+                    </p>
+                </div>
+            </div>
+            )}
+
           </section>
         </main>
         
-        {/* ======================= INÍCIO DA INTEGRAÇÃO CORRIGIDA ======================= */}
         <footer className="text-center mt-5 border-top pt-3 footer-custom">
-          <p>
-            Esta aplicação demonstra conceitos modernos de React. Para ver uma demonstração de manutenção em sistemas legados, acesse a página com jQuery.
-          </p>
-          {/*
-            Este é um link HTML padrão (<a>). Ele causa um recarregamento completo da página,
-            transportando o usuário da aplicação React (SPA) para a página HTML estática.
-            Este é o método correto e seguro para navegar entre um sistema React e uma página legada.
-          */}
-          <a href="/legacy.html" className="btn btn-outline-warning btn-sm">
-            Acessar Página Legada (jQuery)
-          </a>
+          <p className="mb-2"><strong>Navegar para outras versões:</strong></p>
+          <div>
+            <a href="/legacy.html" className="btn btn-outline-warning btn-sm m-1">
+              jQuery + Bootstrap
+            </a>
+            <a href="/custom-css.html" className="btn btn-outline-info btn-sm m-1">
+              Vanilla JS + Custom CSS
+            </a>
+
+          </div>
         </footer>
-        {/* ======================= FIM DA INTEGRAÇÃO CORRIGIDA ======================= */}
-        
       </div>
     </div>
   );
