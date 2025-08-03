@@ -1,38 +1,58 @@
-.App {
-  text-align: center;
+/* Usando variáveis CSS para facilitar a troca de tema */
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --card-bg: #fff;
+  --header-bg: #f8f9fa;
+  --border-color: #dee2e6;
+  /* Cor para o hover */
+  --hover-bg-color: #e9ecef; 
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.dark {
+  --bg-color: #212529;
+  --text-color: #f8f9fa;
+  --card-bg: #343a40;
+  --header-bg: #343a40;
+  --border-color: #495057;
+  /* Cor para o hover no modo escuro */
+  --hover-bg-color: #495057;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.app-container {
+  background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.card, .list-group-item, .form-control {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.list-group-item.active {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: #fff !important;
 }
+
+.header-custom {
+  background-color: var(--header-bg) !important;
+}
+
+
+/* ======================= INÍCIO DA MUDANÇA ======================= */
+/* REQUISITO: Efeito de Hover */
+.user-list .list-group-item-action {
+    cursor: pointer;
+}
+
+/* Aplica o efeito quando o mouse passa sobre um item que NÃO está ativo */
+.user-list .list-group-item-action:not(.active):hover {
+    background-color: var(--hover-bg-color) !important;
+    transform: translateX(5px);
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease;
+}
+/* ======================= FIM DA MUDANÇA ======================= */
